@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.ImageView;
 
 public class TopTenActivity extends Activity 
 {
@@ -23,7 +24,7 @@ public class TopTenActivity extends Activity
 		{
 			if(v==topButton)
 			{
-				Intent newIntent = new Intent(v.getContext(), Location.class);
+				Intent newIntent = new Intent(v.getContext(), entryForm.class);
 				startActivityForResult(newIntent, 0);
 			}
 			if(v==exitButton)
@@ -37,6 +38,7 @@ public class TopTenActivity extends Activity
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        ImageView image = (ImageView) findViewById(R.id.icon);
         prevButton = (Button)findViewById(R.id.prevPlaces);
         topButton = (Button)findViewById(R.id.topTen);
         settingsButton = (Button)findViewById(R.id.mySettings);

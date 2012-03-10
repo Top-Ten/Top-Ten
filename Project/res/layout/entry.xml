@@ -2,9 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <ScrollView
+    android:orientation="vertical" 
+    android:background="@drawable/background"
+    >
+    
+        <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" >
@@ -50,11 +52,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" />
-
-    <Button
-        android:id="@+id/entryDone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="Done" />
+    
+    
+		<Button 
+		    android:id="@+id/current"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="Use Current Location"
+		    android:textColor="#b80000"
+		    android:textStyle="bold"
+		    android:textSize="20dp"
+		    android:background="@drawable/custom_button1"
+		    />"
+	    <Button
+	        android:id="@+id/entryDone"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:text="Done" 
+	        android:textColor="#b80000"
+		    android:textStyle="bold"
+		    android:textSize="20dp"
+		    android:background="@drawable/custom_button1"/>
 
 </LinearLayout>
