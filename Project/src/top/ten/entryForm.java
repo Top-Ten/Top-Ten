@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class entryForm extends Activity 
 {
@@ -55,7 +56,7 @@ public class entryForm extends Activity
 				}
 				else
 				{
-					
+					Toast.makeText(getApplicationContext(), "You are not connected to the internet.", Toast.LENGTH_LONG).show();
 				}
 			}
 		}
