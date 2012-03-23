@@ -28,9 +28,20 @@ public class catagories extends ListActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.listmain);
 		ListView list = getListView();
-		//LayoutInflater inflate = getLayoutInflater();
-		//View header = inflate.inflate(R.layout.listhead, (ViewGroup)findViewById(R.id.header_layout_root));
-		//list.addHeaderView(header, null, false);
+		
+		
+		/*
+		 Steps:
+		 1.) pull from bundle given in previous activity
+		 2.) create a string from current places and activity: ie. "Top 10 " + Activity + "in" + Location
+		 3.) run string into json search in google places api
+		 4.) pull location, address, gps, and ratings from the json for the top ten results
+		 5.) put into list
+		 6.) if selection is picked then send bundle with that places items to map activity
+		 */
+		
+		
+		
 		myImages = new Integer[]{R.drawable.bars,R.drawable.food,R.drawable.historical, R.drawable.entertainment};
 		Gallery myGallery = (Gallery)findViewById(R.id.gallery1);
 		myGallery.setAdapter(new ImageAdapter(this));

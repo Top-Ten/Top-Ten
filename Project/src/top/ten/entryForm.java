@@ -17,7 +17,7 @@ public class entryForm extends Activity
 	EditText zipCode;
 	EditText cityState;
 	Button accept;
-	
+	Button useCurrent;
 	public boolean checkOnline() {
 		ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 		NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -35,27 +35,46 @@ public class entryForm extends Activity
 			if(v==accept)
 			{
 				if(checkOnline()){
+					Bundle newBundle = new Bundle();
+					newBundle.clear();
 					if(zipCode.getText().length()==5)
 					{
 						int theZip = Integer.parseInt(zipCode.getText().toString());
-						//create a bundle and send to the next area
+						newBundle.putInt("zipcode" , theZip);
 					}
-					else if(cityState.getText().length()!=0)
+					else if(zipCode.getText().length()!=0)
 					{
-						String theCity = zipCode.getText().toString();
-						//create a bundle and send to next area
+						//show error msg for not right amount of numbers in zip
+					}
+					
+					if(cityState.getText().length()!=0)
+					{
+						String theCity = cityState.getText().toString();
+						newBundle.putString("zipcode" , theCity);
+					}
+					
+					if(newBundle.isEmpty())
+					{
+						//error message
 					}
 					else
 					{
-					
-						//do nothing, future error check
+						Intent anewIntent = new Intent(v.getContext(), catagories.class);
+						anewIntent.putExtras(newBundle);
+						startActivityForResult(anewIntent, 0);
 					}
-					Intent anewIntent = new Intent(v.getContext(), catagories.class);
-					startActivityForResult(anewIntent, 0);
+					
 				}
 				else
 				{
 					
+				}
+			}
+			else if(v==useCurrent)
+			{
+				if(checkOnline())
+				{
+					//check the gps/area function of the phone
 				}
 			}
 		}
@@ -69,6 +88,8 @@ public class entryForm extends Activity
         cityState = (EditText)findViewById(R.id.autoCompleteTextView1);
         accept = (Button)findViewById(R.id.entryDone);
         accept.setOnClickListener(textListener);
+        useCurrent = (Button)findViewById(R.id.current);
+        useCurrent.setOnClickListener(textListener);
     }
 	
 	
