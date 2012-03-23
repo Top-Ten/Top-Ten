@@ -31,6 +31,11 @@ public class TopTenActivity extends Activity
 			{
 				finish();
 			}
+			if(v==settingsButton)
+			{
+				Intent newIntent = new Intent(v.getContext(), map.class);
+				startActivityForResult(newIntent, 0);
+			}
 		}
 	};
     @Override
