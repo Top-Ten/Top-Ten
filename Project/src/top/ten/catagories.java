@@ -1,8 +1,12 @@
 package top.ten;
 
+import java.util.ArrayList;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -41,10 +45,37 @@ public class catagories extends ListActivity
 		 */
 		
 		
+		/*
+		 Adding new feature:
+		 1.)Change ImageAdapter to be dynamic - DONE
+		 2.)Change the name list to be external file
+		 3.)Add new activity to create a new gallery item
+		 		1.)new activity will take user input
+		 		2.)Add new "gallery item" to the gallery of catagories
+		 		
+		 */
+		
 		
 		myImages = new Integer[]{R.drawable.bars,R.drawable.food,R.drawable.historical, R.drawable.entertainment};
 		Gallery myGallery = (Gallery)findViewById(R.id.gallery1);
-		myGallery.setAdapter(new ImageAdapter(this));
+		ArrayList<Bitmap> temp = new ArrayList<Bitmap>();
+		
+		Bitmap bitmapImage;
+		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.add);
+		temp.add(bitmapImage);
+		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.bars);
+		temp.add(bitmapImage);
+		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.entertainment);
+		temp.add(bitmapImage);
+		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.food);
+		temp.add(bitmapImage);
+		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.historical);
+		temp.add(bitmapImage);
+		
+		ImageAdapter myAdapter = new ImageAdapter(this, temp);
+		
+		
+		myGallery.setAdapter(myAdapter);
 		String listStrings[] = {"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
 		list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listStrings));
 	}
@@ -52,22 +83,29 @@ public class catagories extends ListActivity
 	{
 		private Context con;
 		int imageBackground;
-		public ImageAdapter(Context c)
+		ArrayList<Bitmap> imageList;
+		
+		public ImageAdapter(Context c, ArrayList<Bitmap> l)
 		{
 			con = c;
 			TypedArray myArray = obtainStyledAttributes(R.styleable.Gallery1);
 			imageBackground = myArray.getResourceId(R.styleable.Gallery1_android_galleryItemBackground, 1 );
 			myArray.recycle();
+			imageList = l;
+		}
+		public void addItem(Bitmap newBitmap)
+		{
+			imageList.add(newBitmap);
 		}
 		@Override
 		public int getCount()
 		{
-			return myImages.length;
+			return imageList.size();
 		}
 		@Override
 		public Object getItem(int arg0)
 		{
-			return arg0;
+			return imageList.get(arg0);
 		}
 		@Override
 		public long getItemId(int arg0)
@@ -81,13 +119,14 @@ public class catagories extends ListActivity
 			theGallery.setOrientation(LinearLayout.VERTICAL);
 			
 			ImageView iView = new ImageView(con);
-			iView.setImageResource(myImages[arg0]);
+			iView.setImageBitmap(imageList.get(arg0));
+			//iView.setImageResource(myImages[arg0]);
 			iView.setScaleType(ImageView.ScaleType.FIT_XY);
 			iView.setLayoutParams(new Gallery.LayoutParams(300,240));
 			iView.setBackgroundColor(0xFF5BA2F1);
-			
+			iView.setBackgroundResource(imageBackground);
 			TextView text = new TextView(con);
-			String[] names = {"Bars","Food","Historical","Entertainment"};
+			String[] names = {"new", "Bars","Food","Historical","Entertainment"};
 			
 			String thename = names[arg0];
 			text.setText(thename);
