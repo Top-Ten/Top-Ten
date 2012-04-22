@@ -64,9 +64,9 @@ public class map extends MapActivity implements LocationListener{
         myLocation.enableMyLocation();
         myLocation.runOnFirstFix(new Runnable(){
         	public void run() {
-                OverlayItem mypoint2 = new OverlayItem(myLocation.getMyLocation(), "Here", "You are here...");
-                itemizedOverlay.addOverlay(mypoint2);
-                mapOverlays.add(itemizedOverlay);
+               // OverlayItem mypoint2 = new OverlayItem(myLocation.getMyLocation(), "Here", "You are here...");
+               // itemizedOverlay.addOverlay(mypoint2);
+              //  mapOverlays.add(itemizedOverlay);
         		//myControl.animateTo(myLocation.getMyLocation());
         		}
         	});
