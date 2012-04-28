@@ -2,12 +2,17 @@ package top.ten;
 
 import java.util.ArrayList;
 
+import top.ten.Place;
+import top.ten.PlaceRequest;
+import top.ten.PlacesList;
+
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -26,13 +31,16 @@ import android.widget.TextView;
 public class catagories extends ListActivity
 {
 	Integer[] myImages;
+	String listStrings[];
+	float[] rate;
+	ListView list;
+	ArrayAdapter<String> adapt;
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.listmain);
-		ListView list = getListView();
-		
+		list = getListView();
 		
 		/*
 		 Steps:
@@ -76,8 +84,16 @@ public class catagories extends ListActivity
 		
 		
 		myGallery.setAdapter(myAdapter);
-		String listStrings[] = {"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
-		list.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, listStrings));
+		listStrings = new String[]{"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
+		rate = new float[]{0,0,0,0,0,0,0,0,0,0};
+		listviewAdapter adapt = new listviewAdapter(this, listStrings, rate);
+
+		list.setAdapter(adapt);
+		
+		
+		
+		SearchSrv mysearch = new SearchSrv();
+		mysearch.execute();
 	}
 	public class ImageAdapter extends BaseAdapter
 	{
@@ -141,5 +157,70 @@ public class catagories extends ListActivity
 			
 		}
 	}
+	
+	
+	
+	private class SearchSrv extends AsyncTask<Void, Void, PlacesList>{
+		@Override
+		protected PlacesList doInBackground(Void... params) {
+			// TODO Auto-generated method stub
+			PlacesList pl = null;
+			try {
+					pl = new PlaceRequest().performSearch();
+					
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				//Toast toast = Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_LONG);
+			}
+			return pl;
+		}
+    
+		@Override
+		protected void onPostExecute(PlacesList result) {
+			// TODO Auto-generated method stub
+			String text = "Result \n";
+			String listitems[] = {"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10","item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
+			float ratings[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+				if (result!=null){
+					int i = 0;
+					for(Place place: result.results){
+						listitems[i] = place.name;
+						ratings[i] = place.rating;
+						i++;
+					}
+					boolean swapped=true;
+					int j = 0;
+					float temp;
+					String temps;
+					while(swapped)
+					{
+						swapped=false;
+						for(i = 19;i>0+j;i--)
+						{
+							if(ratings[i] > ratings[i-1])
+							{
+								temp = ratings[i];
+								ratings[i] = ratings[i-1];
+								ratings[i-1] = temp;
+								temps = listitems[i];
+								listitems[i] = listitems[i-1];
+								listitems[i-1] = temps;
+								
+								swapped=true;
+							}
+						}
+						j++;
+					}
+					for(i=0;i<10;i++)
+					{
+						listStrings[i] = listitems[i];
+						rate[i] = ratings[i];
+					}
+					((BaseAdapter)list.getAdapter()).notifyDataSetChanged();
+					
+				}
+				setProgressBarIndeterminateVisibility(false);
+     }
+    }
 	
 }
