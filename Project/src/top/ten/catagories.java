@@ -26,7 +26,7 @@ public class catagories extends ListActivity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.listmain);
+		setContentView(R.layout.list);
 		ListView list = getListView();
 		//LayoutInflater inflate = getLayoutInflater();
 		//View header = inflate.inflate(R.layout.listhead, (ViewGroup)findViewById(R.id.header_layout_root));

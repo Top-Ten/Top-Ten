@@ -4,7 +4,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:background="@drawable/background">
-		
+				<TextView 
+		   	android:id="@+id/dummytext"
+		   	android:layout_width="fill_parent"
+		   	android:layout_height="wrap_content"
+		   	android:textSize="22dp"	    />
+		
 		<ImageView
 		    android:id="@+id/icon"
 		    android:layout_width="fill_parent"
