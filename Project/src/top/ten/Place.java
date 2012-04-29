@@ -14,8 +14,24 @@ public class Place {
 	@Key
 	public float rating;
 	
+	@Key
+	public Geometry geometry;
+	
+	public static class Geometry
+	{
+		@Key
+		public Location location;
+	}
+	
+	public static class Location
+	{
+		@Key
+		public float lat;
+		@Key
+		public float lng;
+	}
 	@Override
 	public String toString() {
-		return name + " - " + id + " - " + reference + " - " + rating;
+		return name + " - " + id + " - " + reference + " - " + rating + " - " + geometry.location.lat + " - " + geometry.location.lng;
 	}
 }

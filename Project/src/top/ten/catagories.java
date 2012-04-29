@@ -8,6 +8,7 @@ import top.ten.PlacesList;
 
 import android.app.ListActivity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -33,15 +34,24 @@ public class catagories extends ListActivity
 	Integer[] myImages;
 	String listStrings[];
 	float[] rate;
+	float[][] gps;
 	ListView list;
 	ArrayAdapter<String> adapt;
+	@Override
+	public void onListItemClick(ListView l, View v, int pos, long id)
+	{
+		Intent newIntent = new Intent(v.getContext(), map.class);
+		newIntent.putExtra("latit", gps[pos][0]);
+		newIntent.putExtra("longit", gps[pos][1]);
+		startActivityForResult(newIntent, 0);
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.listmain);
 		list = getListView();
-		
+		gps = new float[10][2];
 		/*
 		 Steps:
 		 1.) pull from bundle given in previous activity
@@ -89,7 +99,6 @@ public class catagories extends ListActivity
 		listviewAdapter adapt = new listviewAdapter(this, listStrings, rate);
 
 		list.setAdapter(adapt);
-		
 		
 		
 		SearchSrv mysearch = new SearchSrv();
@@ -181,11 +190,14 @@ public class catagories extends ListActivity
 			String text = "Result \n";
 			String listitems[] = {"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10","item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
 			float ratings[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+			float gpstemp[][] = new float[20][2];
 				if (result!=null){
 					int i = 0;
 					for(Place place: result.results){
 						listitems[i] = place.name;
 						ratings[i] = place.rating;
+						gpstemp[i][0] = place.geometry.location.lat;
+						gpstemp[i][1] = place.geometry.location.lng;
 						i++;
 					}
 					boolean swapped=true;
@@ -202,9 +214,18 @@ public class catagories extends ListActivity
 								temp = ratings[i];
 								ratings[i] = ratings[i-1];
 								ratings[i-1] = temp;
+								
 								temps = listitems[i];
 								listitems[i] = listitems[i-1];
 								listitems[i-1] = temps;
+								
+								temp = gpstemp[i][0];
+								gpstemp[i][0] = gpstemp[i-1][0];
+								gpstemp[i-1][0] = temp;
+								
+								temp = gpstemp[i][1];
+								gpstemp[i][1] = gpstemp[i-1][1];
+								gpstemp[i-1][1] = temp;
 								
 								swapped=true;
 							}
@@ -215,6 +236,7 @@ public class catagories extends ListActivity
 					{
 						listStrings[i] = listitems[i];
 						rate[i] = ratings[i];
+						gps[i] = gpstemp[i];
 					}
 					((BaseAdapter)list.getAdapter()).notifyDataSetChanged();
 					

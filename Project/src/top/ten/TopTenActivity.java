@@ -33,13 +33,6 @@ public class TopTenActivity extends Activity
 			}
 			if(v==settingsButton)
 			{
-				//creates intent to map class
-				Intent newIntent = new Intent(v.getContext(), map.class);
-				//creates string named extras to send to the map class
-				newIntent.putExtra("latit", 30.0);
-				newIntent.putExtra("longit", 50.0);
-				newIntent.putExtra("test", "Louvre");
-				startActivityForResult(newIntent, 0);
 			}
 		}
 	};

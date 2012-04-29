@@ -43,14 +43,14 @@ public class map extends MapActivity implements LocationListener{
         //Get passed information from activity calls
         Bundle extras = getIntent().getExtras();
         //assign extra values to variables
-        double latitude = extras.getDouble("latit");
-        double longitude = extras.getDouble("longit");
+        int latitude = (int)(extras.getFloat("latit")*1000000);
+        int longitude = (int)(extras.getFloat("longit")*1000000);
         
         
         final List<Overlay> mapOverlays = myMap.getOverlays();  
         Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);  
         final HItemizedOverlay itemizedOverlay = new HItemizedOverlay(drawable, this);  
-        
+        /*
         //Get lat longs from given location or address and apply them to new geopoint
         try {
         	//gives string with name of location or address (called "test" atm) to the geocoder to get lat longs
@@ -63,8 +63,8 @@ public class map extends MapActivity implements LocationListener{
             }    
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        
+        }*/
+        myGeo = new GeoPoint(latitude, longitude);
         //puts geopoint on map with added dialogue popup on click
         OverlayItem mypoint = new OverlayItem(myGeo, "Test", "This is a test point"); 
         
