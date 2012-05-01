@@ -20,6 +20,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Gallery;
@@ -37,6 +39,7 @@ public class catagories extends ListActivity
 	float[][] gps;
 	ListView list;
 	ArrayAdapter<String> adapt;
+	String[] names = {"new", "Bars","Entertainment", "Food", "Historical"};
 	@Override
 	public void onListItemClick(ListView l, View v, int pos, long id)
 	{
@@ -94,15 +97,39 @@ public class catagories extends ListActivity
 		
 		
 		myGallery.setAdapter(myAdapter);
-		listStrings = new String[]{"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
+		myGallery.setSelection(3);
+		
+		myGallery.setOnItemSelectedListener(new OnItemSelectedListener()
+		{
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1,int arg2, long arg3) {
+				for(int i = 0;i<10;i++)
+				{
+					listStrings[i] = "";
+				}
+				((BaseAdapter)list.getAdapter()).notifyDataSetChanged();
+				SearchSrv newSearch= new SearchSrv();
+				Bundle b = getIntent().getExtras();
+				
+				newSearch.execute(names[arg2], b.getString("zipcode"));
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+				
+			} 
+          
+		});
+		
+		
+		listStrings = new String[]{"","","","","","","","","",""};
 		rate = new float[]{0,0,0,0,0,0,0,0,0,0};
 		listviewAdapter adapt = new listviewAdapter(this, listStrings, rate);
 
 		list.setAdapter(adapt);
 		
-		
-		SearchSrv mysearch = new SearchSrv();
-		mysearch.execute();
 	}
 	public class ImageAdapter extends BaseAdapter
 	{
@@ -151,7 +178,6 @@ public class catagories extends ListActivity
 			iView.setBackgroundColor(0xFF5BA2F1);
 			iView.setBackgroundResource(imageBackground);
 			TextView text = new TextView(con);
-			String[] names = {"new", "Bars","Food","Historical","Entertainment"};
 			
 			String thename = names[arg0];
 			text.setText(thename);
@@ -169,13 +195,13 @@ public class catagories extends ListActivity
 	
 	
 	
-	private class SearchSrv extends AsyncTask<Void, Void, PlacesList>{
+	private class SearchSrv extends AsyncTask<String, String, PlacesList>{
 		@Override
-		protected PlacesList doInBackground(Void... params) {
+		protected PlacesList doInBackground(String...strings) {
 			// TODO Auto-generated method stub
 			PlacesList pl = null;
 			try {
-					pl = new PlaceRequest().performSearch();
+					pl = new PlaceRequest().performSearch(strings[0],strings[1], getApplicationContext());
 					
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
@@ -188,7 +214,7 @@ public class catagories extends ListActivity
 		protected void onPostExecute(PlacesList result) {
 			// TODO Auto-generated method stub
 			String text = "Result \n";
-			String listitems[] = {"item1","item2","item3","item4","item5","item6","item7","item8","item9","item10","item1","item2","item3","item4","item5","item6","item7","item8","item9","item10"};
+			String listitems[] = {"","","","","","","","","","","","","","","","","","","",""};
 			float ratings[] = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
 			float gpstemp[][] = new float[20][2];
 				if (result!=null){

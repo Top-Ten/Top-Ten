@@ -1,8 +1,13 @@
 package top.ten;
 
 import java.io.IOException;
+import java.util.List;
 
 import top.ten.PlacesList;
+import android.app.Application;
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,16 +42,21 @@ public class PlaceRequest {
 		double latitude = 33.199568;
 		double longitude = -97.140094;
 
-
 		@SuppressWarnings("deprecation")
-		public PlacesList performSearch() throws Exception {
+		public PlacesList performSearch(String name, String add,Context c) throws Exception {
 		try {
+				Geocoder geocoder= new Geocoder(c);
+			 	List<Address> addresses = geocoder.getFromLocationName(add, 1);
+		            if (addresses.size() > 0) {
+		            	latitude =addresses.get(0).getLatitude();
+		                longitude =addresses.get(0).getLongitude();
+		            }    
 				//Log.v(LOG_KEY, "Start Search");
 				GenericUrl reqUrl = new GenericUrl(PLACES_SEARCH_URL);
 				reqUrl.put("key", API_KEY);
 				reqUrl.put("location", latitude + "," + longitude);
 				reqUrl.put("radius", 5000);
-				reqUrl.put("keyword", "fast food");
+				reqUrl.put("keyword", name);
 				reqUrl.put("rankby", "prominence");
 				reqUrl.put("sensor", "false");
 				

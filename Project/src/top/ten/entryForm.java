@@ -40,15 +40,14 @@ public class entryForm extends Activity
 					newBundle.clear();
 					if(zipCode.getText().length()==5)
 					{
-						int theZip = Integer.parseInt(zipCode.getText().toString());
-						newBundle.putInt("zipcode" , theZip);
+						String theZip = zipCode.getText().toString();
+						newBundle.putString("zipcode" , theZip);
 					}
 					else if(zipCode.getText().length()!=0)
 					{
 						//show error msg for not right amount of numbers in zip
 					}
-					
-					if(cityState.getText().length()!=0)
+					else if(cityState.getText().length()!=0)
 					{
 						String theCity = cityState.getText().toString();
 						newBundle.putString("zipcode" , theCity);
