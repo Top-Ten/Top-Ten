@@ -105,6 +105,7 @@ public class catagories extends ListActivity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
+
 		setContentView(R.layout.listmain);
 		list = getListView();
 		gps = new float[10][2];
@@ -133,8 +134,7 @@ public class catagories extends ListActivity
 		 		2.)Add new "gallery item" to the gallery of catagories
 		 		
 		 */
-		
-		
+
 		myImages = new Integer[]{R.drawable.bars,R.drawable.food,R.drawable.historical, R.drawable.entertainment};
 		Gallery myGallery = (Gallery)findViewById(R.id.gallery1);
 		bitmaplist = new ArrayList<Bitmap>();
