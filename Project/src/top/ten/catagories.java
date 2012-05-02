@@ -1,11 +1,13 @@
 package top.ten;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import top.ten.Place;
 import top.ten.PlaceRequest;
 import top.ten.PlacesList;
 
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,13 +19,19 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,8 +46,13 @@ public class catagories extends ListActivity
 	float[] rate;
 	float[][] gps;
 	ListView list;
+	ArrayList<String> listofnames;
 	ArrayAdapter<String> adapt;
-	String[] names = {"new", "Bars","Entertainment", "Food", "Historical"};
+	ArrayList<Bitmap> bitmaplist;
+	EditText newtext;
+	ImageAdapter myAdapter;
+	Dialog dialog;
+	boolean isNameMenu = false;
 	@Override
 	public void onListItemClick(ListView l, View v, int pos, long id)
 	{
@@ -48,6 +61,46 @@ public class catagories extends ListActivity
 		newIntent.putExtra("longit", gps[pos][1]);
 		startActivityForResult(newIntent, 0);
 	}
+	
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
+		MenuInflater themenu = getMenuInflater();
+		themenu.inflate(R.layout.menu, menu);
+		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		switch(item.getItemId())
+		{
+		case R.id.menu_add:{
+			dialog = new Dialog(this);
+			dialog.setContentView(R.layout.dialog);
+			dialog.setTitle("Add a new Catagory");
+			newtext = (EditText)dialog.findViewById(R.id.newcatentry);
+			Button yes = (Button)dialog.findViewById(R.id.yesButton);
+			yes.setOnClickListener(new OnClickListener(){
+
+				@Override
+				public void onClick(View v) {
+					Bitmap bitmapImage;
+					bitmapImage = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.add);
+					bitmaplist.add(bitmapImage);
+					listofnames.add(newtext.getText().toString());
+					myAdapter.notifyDataSetChanged();
+					dialog.dismiss();
+				}
+				
+			});
+			dialog.show();
+			return true;
+		}
+		default:return super.onOptionsItemSelected(item);
+		}
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -55,6 +108,11 @@ public class catagories extends ListActivity
 		setContentView(R.layout.listmain);
 		list = getListView();
 		gps = new float[10][2];
+		listofnames = new ArrayList<String>();
+		listofnames.add("Bars");
+		listofnames.add("Entertainment");
+		listofnames.add("Fast Food");
+		listofnames.add("Historical");
 		/*
 		 Steps:
 		 1.) pull from bundle given in previous activity
@@ -79,25 +137,25 @@ public class catagories extends ListActivity
 		
 		myImages = new Integer[]{R.drawable.bars,R.drawable.food,R.drawable.historical, R.drawable.entertainment};
 		Gallery myGallery = (Gallery)findViewById(R.id.gallery1);
-		ArrayList<Bitmap> temp = new ArrayList<Bitmap>();
+		bitmaplist = new ArrayList<Bitmap>();
 		
 		Bitmap bitmapImage;
-		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.add);
-		temp.add(bitmapImage);
 		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.bars);
-		temp.add(bitmapImage);
+		bitmaplist.add(bitmapImage);
 		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.entertainment);
-		temp.add(bitmapImage);
+		bitmaplist.add(bitmapImage);
 		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.food);
-		temp.add(bitmapImage);
+		bitmaplist.add(bitmapImage);
 		bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.historical);
-		temp.add(bitmapImage);
+		bitmaplist.add(bitmapImage);
+		/*bitmapImage = BitmapFactory.decodeResource(this.getResources(), R.drawable.add);
+		temp.add(bitmapImage);*/
 		
-		ImageAdapter myAdapter = new ImageAdapter(this, temp);
+		myAdapter = new ImageAdapter(this, bitmaplist);
 		
 		
 		myGallery.setAdapter(myAdapter);
-		myGallery.setSelection(3);
+		myGallery.setSelection(1);
 		
 		myGallery.setOnItemSelectedListener(new OnItemSelectedListener()
 		{
@@ -112,7 +170,7 @@ public class catagories extends ListActivity
 				SearchSrv newSearch= new SearchSrv();
 				Bundle b = getIntent().getExtras();
 				
-				newSearch.execute(names[arg2], b.getString("zipcode"));
+				newSearch.execute(listofnames.get(arg2), b.getString("zipcode"));
 			}
 
 			@Override
@@ -179,7 +237,7 @@ public class catagories extends ListActivity
 			iView.setBackgroundResource(imageBackground);
 			TextView text = new TextView(con);
 			
-			String thename = names[arg0];
+			String thename = listofnames.get(arg0);
 			text.setText(thename);
 			text.setGravity(Gravity.CENTER);
 			text.setTextColor(0xFFb80000);
