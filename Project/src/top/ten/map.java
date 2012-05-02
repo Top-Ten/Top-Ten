@@ -1,6 +1,8 @@
 package top.ten;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import com.google.android.maps.GeoPoint;
@@ -17,6 +19,11 @@ import android.location.LocationListener;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
@@ -28,7 +35,12 @@ public class map extends MapActivity implements LocationListener{
 	MapView myMap;
 	Overlay myOverlay;
 	private MyLocationOverlay myLocation;
-	
+	Button been;
+	int latitude;
+	int longitude;
+	float lat;
+	float lon;
+	String name;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,14 +51,27 @@ public class map extends MapActivity implements LocationListener{
         myMap = (MapView) findViewById(R.id.mapView);
         myMap.displayZoomControls(true);
         myMap.setBuiltInZoomControls(true);
-        
+       
         //Get passed information from activity calls
         Bundle extras = getIntent().getExtras();
         //assign extra values to variables
-        int latitude = (int)(extras.getFloat("latit")*1000000);
-        int longitude = (int)(extras.getFloat("longit")*1000000);
+        lat = extras.getFloat("latit");
+        lon = extras.getFloat("longit");
+        latitude = (int)(lat*1000000);
+        longitude = (int)(lon*1000000);
         
         
+        
+        
+        name = extras.getString("name");
+        been = (Button)this.findViewById(R.id.ivebeen);
+        been.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				addplace(name, lat, lon);
+			}
+			
+        });
         final List<Overlay> mapOverlays = myMap.getOverlays();  
         Drawable drawable = this.getResources().getDrawable(R.drawable.androidmarker);  
         final HItemizedOverlay itemizedOverlay = new HItemizedOverlay(drawable, this);  
@@ -119,4 +144,26 @@ public class map extends MapActivity implements LocationListener{
 		Log.e("GPS", "status changed to " + provider + " [" + status + "]");
 		
 	}
+	
+	public void addplace(String name, float lat, float lon)
+    {
+    	try{
+    	BufferedWriter br = new BufferedWriter(new OutputStreamWriter(openFileOutput("dummytext", this.MODE_APPEND)));    	
+    		br.write(name);
+    		br.write("\n");
+    		br.write(Float.toString(lat));
+    		br.write("\n");
+    		br.write(Float.toString(lon));
+    		br.write("\n");
+
+    		br.close();
+    		
+    		   	
+    	}
+    	catch(Exception e)
+    	{
+    		e.printStackTrace();
+    	}
+    }
+	
 }

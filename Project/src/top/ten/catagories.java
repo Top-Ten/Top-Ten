@@ -59,6 +59,7 @@ public class catagories extends ListActivity
 		Intent newIntent = new Intent(v.getContext(), map.class);
 		newIntent.putExtra("latit", gps[pos][0]);
 		newIntent.putExtra("longit", gps[pos][1]);
+		newIntent.putExtra("name", listStrings[pos]);
 		startActivityForResult(newIntent, 0);
 	}
 	

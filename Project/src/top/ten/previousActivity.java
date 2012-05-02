@@ -7,7 +7,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 
 import android.app.ListActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -19,9 +21,18 @@ public class previousActivity extends ListActivity {
     String list[];
     float lat[];
     float longi[];
-    String address[];
     ArrayAdapter<String> adapter;
     ListView listView;
+    @Override
+	public void onListItemClick(ListView l, View v, int pos, long id)
+	{
+		Intent newIntent = new Intent(v.getContext(), map.class);
+		newIntent.putExtra("latit", lat[pos]);
+		newIntent.putExtra("longit", longi[pos]);
+		newIntent.putExtra("name", list[pos]);
+		startActivityForResult(newIntent, 0);
+	}
+    
     @Override
 	public void onCreate(Bundle savedInstanceState) 
 	    {
@@ -31,16 +42,10 @@ public class previousActivity extends ListActivity {
 	      list = new String[]{"","","","","","","","","",""};
 	      lat = new float[10];
 	      longi = new float[10];
-	      address = new String[10];
-	      addplace("Whataburger", "1717 blah dr", (float)33.2, (float)33.3, (float)4.0);
-	      addplace("JAck", "1717 blah dr", (float)33.2, (float)33.3, (float)4.0);
-	      addplace("What", "1717 blah dr", (float)33.2, (float)33.3, (float)4.0);
-	      addplace("place", "1717 blah dr", (float)33.2, (float)33.3, (float)4.0);
-		  readText();
 	      adapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,
 	    	        list);
 	      listView.setAdapter(adapter);
-	        
+	      readText();
 	    }
 	
 	 public void addplace(String name, String address, float lat, float lon, float rating)
@@ -56,8 +61,7 @@ public class previousActivity extends ListActivity {
 	    		br.write("\n");
 	    		br.write(Float.toString(lon));
 	    		br.write("\n");
-	    		br.write(address);
-	    		br.write("\n");
+
 	    		
 	    			
 	       	
@@ -86,7 +90,6 @@ public class previousActivity extends ListActivity {
 	    			list[i]=str;
 	    			lat[i] = new Float(br.readLine());    				
 	    			longi[i] = new Float(br.readLine());
-	    			address[i] = br.readLine();
 	    			i++;
 	       		}
 	    		

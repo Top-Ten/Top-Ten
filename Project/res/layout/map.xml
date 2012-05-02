@@ -10,5 +10,13 @@
         android:enabled="true" android:clickable="true"
         android:apiKey="02lqW2j_5mtI1m3lBWrHmkcIyshRgvY5XkAqUuA" /> 
     
+    <Button
+        android:id="@+id/ivebeen"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:text="I've been Here"
+        android:background="@drawable/custom_button1"
+        />
 
 </RelativeLayout>
